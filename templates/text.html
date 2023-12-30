@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Display</title>
+</head>
+<body>
+    <h1>Text Display Settings</h1>
+    <form action="/text" method="post">
+        <label for="text">Text:</label>
+        <input type="text" name="text" id="text" required>
+        <label for="font">Font:</label>
+        <select name="font" id="font">
+            {% for font in fonts %}
+            <option value="{{ font }}">{{ font }}</option>
+            {% endfor %}
+        </select>
+        <label for="speed">Speed:</label>
+        <input type="number" name="speed" id="speed" required>
+        <input type="submit" value="Display Text">
+    </form>
+</body>
+</html>
