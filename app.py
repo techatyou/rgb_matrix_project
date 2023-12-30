@@ -70,3 +70,4 @@ def is_display_running():
 
 if __name__ == '__main__':
     app.run(debug=True)
+# TEST
