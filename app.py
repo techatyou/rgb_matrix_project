@@ -32,8 +32,9 @@ def index():
             text = request.form.get('text')
             font = request.form.get('font')
             speed = request.form.get('speed')
+            color = request.form.get('color')  # Added color selection from the GUI
             stop_display()
-            start_display_text(text, font, speed)
+            start_display_text(text, font, speed, color)  # Pass color to the function
         elif action == 'Stop Text':
             stop_display()
     return render_template('index.html', fonts=AVAILABLE_FONTS, display_running=is_display_running())
@@ -46,10 +47,10 @@ def display_graphic_on_matrix(image_path):
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while displaying the graphic on the matrix: {e}")
 
-def start_display_text(text, font, speed):
+def start_display_text(text, font, speed, color):
     global display_process
     matrix_script_path = '/root/rgb_matrix_project/led_matrix/runtext.py'
-    cmd = ['python3', matrix_script_path, '--text', text, '--font', font, '--speed', speed]
+    cmd = ['python3', matrix_script_path, '--text', text, '--font', font, '--speed', speed, '--color', color]
     try:
         display_process = subprocess.Popen(cmd)
     except subprocess.CalledProcessError as e:

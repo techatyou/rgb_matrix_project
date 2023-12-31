@@ -33,10 +33,9 @@ def run_text(text, font_name, speed, rows, cols, color):
     else:  # color == 'blue'
         text_color = graphics.Color(0, 0, 255)
 
-    # Calculate the text width
+    # Colors and position setup
     xpos = cols
     ypos = rows // 2 - font.baseline - 1
-    text_len = graphics.DrawText(matrix, font, xpos, ypos, text_color, text)
 
     # Check if text is provided
     if not text:
@@ -46,11 +45,13 @@ def run_text(text, font_name, speed, rows, cols, color):
     # Display text
     while True:
         matrix.Clear()
-        graphics.DrawText(matrix, font, xpos, ypos, text_color, text)
-        xpos -= speed
-        if xpos + text_len < 0:
-            xpos = cols
-        time.sleep(0.05)
+        for char in text:
+            char_width = font.CharacterWidth(ord(char))  # Get the width of the character
+            graphics.DrawText(matrix, font, xpos - char_width, ypos, text_color, char)
+            xpos -= char_width + 1  # Add 1-pixel space between characters
+            if xpos + char_width < 0:
+                xpos = cols
+            time.sleep(0.05)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
