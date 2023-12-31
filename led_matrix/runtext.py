@@ -3,7 +3,7 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 import argparse
 import sys
 
-def run_text(text, font_name, speed, rows, cols):
+def run_text(text, font_name, speed, rows, cols, color):
     options = RGBMatrixOptions()
     options.rows = rows
     options.cols = cols
@@ -20,10 +20,23 @@ def run_text(text, font_name, speed, rows, cols):
     font = graphics.Font()
     font.LoadFont(font_path)
 
-    # Colors and position setup
-    color = graphics.Color(255, 255, 255)
-    xpos = cols * options.chain_length
-    ypos = rows // 2
+    # Parse the color argument and ensure it's a valid option
+    if color not in ('red', 'green', 'blue'):
+        print("Invalid color option. Use 'red', 'green', or 'blue'.")
+        sys.exit(1)
+
+    # Set the color based on the argument
+    if color == 'red':
+        text_color = graphics.Color(255, 0, 0)
+    elif color == 'green':
+        text_color = graphics.Color(0, 255, 0)
+    else:  # color == 'blue'
+        text_color = graphics.Color(0, 0, 255)
+
+    # Calculate the text width
+    xpos = cols
+    ypos = rows // 2 - font.baseline - 1
+    text_len = graphics.DrawText(matrix, font, xpos, ypos, text_color, text)
 
     # Check if text is provided
     if not text:
@@ -33,10 +46,10 @@ def run_text(text, font_name, speed, rows, cols):
     # Display text
     while True:
         matrix.Clear()
-        len = graphics.DrawText(matrix, font, xpos, ypos, color, text)
+        graphics.DrawText(matrix, font, xpos, ypos, text_color, text)
         xpos -= speed
-        if xpos + len < 0:
-            xpos = cols * options.chain_length
+        if xpos + text_len < 0:
+            xpos = cols
         time.sleep(0.05)
 
 if __name__ == "__main__":
@@ -44,6 +57,7 @@ if __name__ == "__main__":
     parser.add_argument('--text', help='The text to scroll on the matrix', default='Hello')
     parser.add_argument('--font', help='Name of the font (without .bdf extension)', default='6x9')
     parser.add_argument('--speed', help='Speed of the text scroll', type=int, default=1)
+    parser.add_argument('--color', help='Text color: red, green, or blue', default='red')
     args = parser.parse_args()
 
-    run_text(args.text, args.font, args.speed, 32, 64)  # Assuming 32 rows and 64 columns per panel
+    run_text(args.text, args.font, args.speed, 32, 64, args.color)  # Assuming 32 rows and 64 columns per panel
