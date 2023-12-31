@@ -7,7 +7,7 @@ def run_text(text, font_name, speed, rows, cols):
     options = RGBMatrixOptions()
     options.rows = rows
     options.cols = cols
-    options.chain_length = 2  # Adjust if different
+    options.chain_length = 1  # Adjust if different
     options.parallel = 1
     options.hardware_mapping = 'adafruit-hat'
 
@@ -23,7 +23,7 @@ def run_text(text, font_name, speed, rows, cols):
     # Colors and position setup
     color = graphics.Color(255, 255, 255)
     xpos = cols * options.chain_length
-    ypos = rows // 2 - 4
+    ypos = rows // 2
 
     # Check if text is provided
     if not text:
